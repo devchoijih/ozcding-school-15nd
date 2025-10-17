@@ -94,5 +94,12 @@ except Exception as exception:
 
 """
 
+##raise 구문
+##예외를 강제로 발생시키는 기능, 우리가 의도하지 않게 작동하는 상황을 방지하기 위함
 
+number = input("숫자를 입력해주세요")
+number = int(number)
+
+if number > 0:
+    raise NotImplementedError
 
