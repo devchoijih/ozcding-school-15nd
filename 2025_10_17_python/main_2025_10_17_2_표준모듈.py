@@ -45,7 +45,7 @@ print(m.floor(4.1))
 """
 
 ##외부모듈
-## pit install 모듈 이름
+## pip install 모듈 이름 //powersell 이용
 
 ## beautifulsoup4 공식 페이지 : https://www.crummy.com/software/BeautifulSoup/bs4/doc.ko/
 
