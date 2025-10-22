@@ -19,7 +19,8 @@ oz_students = [
     CreateOzStuduent("윤은성", 3, 4, 4, 1),
     CreateOzStuduent("홍수철", 2, 3, 1, 5)
 ]
-
+     
+     
 print(oz_students[0].name)
 
 """
