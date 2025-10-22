@@ -1,4 +1,4 @@
-# 🐍 OZ Coding School 15기
+# 🐍 OZ Coding School 초격차 캠프 15기 수업 내용 정리
 
 > **ozcding-school-15nd**에서 배운 학습 내용을 정리한 저장소입니다.  
 
