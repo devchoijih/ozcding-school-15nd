@@ -5,11 +5,9 @@
 
 ---
 
-## 🌐 GitHub Pages
+## 🐍 python (문법)
 
-👉 [ozcding-school-15nd Python Page 바로가기](https://devchoijih.github.io/ozcding-school-15nd_python/)
-
----
+-- 레파지토리 소스 참고
 
 ## 📚 Database (DB)
 
