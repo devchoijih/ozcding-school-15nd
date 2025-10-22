@@ -1,13 +1,12 @@
-# 🐍 OZ Coding School 15기 - Python Study
+# 🐍 OZ Coding School 15기
 
-> **ozcding-school-15nd**에서 배운 파이썬 관련 학습 내용을 정리한 저장소입니다.  
-> 데이터베이스(DB) 기초부터 MySQL 실습까지, 학습한 내용을 정리하여 GitHub Pages로 공유합니다.
+> **ozcding-school-15nd**에서 배운 학습 내용을 정리한 저장소입니다.  
 
 ---
 
 ## 🐍 python (문법)
 
--- 레파지토리 소스 참고
+ 레파지토리 소스 참고
 
 ## 📚 Database (DB)
 
