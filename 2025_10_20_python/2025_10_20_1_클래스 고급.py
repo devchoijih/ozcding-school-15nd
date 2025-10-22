@@ -18,6 +18,7 @@ oz_students = [
     CreateOzStuduent("홍혜인", 4, 5, 2, 4),
     CreateOzStuduent("윤은성", 3, 4, 4, 1),
     CreateOzStuduent("홍수철", 2, 3, 1, 5)
+    
 ]
      
 
