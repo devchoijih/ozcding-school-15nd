@@ -20,7 +20,7 @@ oz_students = [
     CreateOzStuduent("홍수철", 2, 3, 1, 5)
 ]
      
-     
+
 print(oz_students[0].name)
 
 """
@@ -30,6 +30,8 @@ class 클래스 이름:
     def 메소드 이름(self, 추가적인 매개변수)
         pass
 """
+
+
 
 """
 class CreateOzStuduent:
