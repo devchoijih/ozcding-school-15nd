@@ -13,20 +13,20 @@
 ### 1️⃣ DB 기초
 > **데이터베이스의 개념과 필요성, 구조에 대한 기초 학습**
 
-🔗 [DB기초 바로가기](https://devchoijih.github.io/ozcding-school-15nd_python/2025_10_21_DB/01.%20DB기초.html)
+🔗 [DB기초 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_21_DB/01.%20DB기초.html)
 
 ---
 
 ### 2️⃣ RDBMS (관계형 데이터베이스)
 > **RDBMS의 특징, 관계 모델, 키(key)의 개념 및 제약조건 이해**
 
-🔗 [RDBMS 바로가기](https://devchoijih.github.io/ozcding-school-15nd_python/2025_10_21_DB/02.%20RDBMS.html)
+🔗 [RDBMS 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_21_DB/02.%20RDBMS.html)
 
 ---
 
 ### 3️⃣ MySQL 권한설정 및 DDL 기본
 > **MySQL 사용자 권한 설정, 데이터베이스 생성 및 DDL 문법 학습**
 
-🔗 [MySQL 권한설정 및 DDL 기본 바로가기](https://devchoijih.github.io/ozcding-school-15nd_python/2025_10_22_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
+🔗 [MySQL 권한설정 및 DDL 기본 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_22_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
 
 ---
