@@ -31,7 +31,7 @@
 
 ---
 
-### 4️⃣ MySQL 기초
+### 4️⃣ SQL(DML) 기초, SQL(DML) 심화
 > **MySQL 기본 개념 및 구조 이해**
 
-🔗 [MySQL 기초 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_22_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
+🔗 [MySQL 기초 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_23_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
