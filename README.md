@@ -30,3 +30,8 @@
 🔗 [MySQL 권한설정 및 DDL 기본 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_22_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
 
 ---
+
+### 4️⃣ MySQL 기초
+> **MySQL 기본 개념 및 구조 이해**
+
+🔗 [MySQL 기초 바로가기](https://devchoijih.github.io/ozcding-school-15nd/2025_10_22_DB/01.%20MySQL%20%EA%B8%B0%EC%B4%88.html)
