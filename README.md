@@ -39,7 +39,7 @@
 ---
 
 ### RDBMS_MySQL(실습)
-> **RDBMS 타입과 쿼리 실습
+> **RDBMS 타입과 쿼리 실습**
 
 🔗 [RDBMS_MySQL(실습)](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/02.%20RDBMS_MySQL%20(%EC%8B%A4%EC%8A%B5).html)
 
@@ -49,4 +49,11 @@
 > **ERD 그리는 법과 ERD 간편하게 그리는 툴 소개**
 
 🔗 [ERD(Entity Relationship Diagram)  프로그램](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/03.%20ERD(Entity%20Relationship%20Diagram)%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8.html)
+
+---
+
+### PyMySQL
+> **PyMySQL CRUD 구현**
+
+🔗 [PyMySQL](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/PyMysQL.html)
 
