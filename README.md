@@ -55,5 +55,5 @@
 ### PyMySQL
 > **PyMySQL CRUD 구현**
 
-🔗 [PyMySQL](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/PyMysQL.html)
+🔗 [PyMySQL](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/PyMysQL.html)
 
