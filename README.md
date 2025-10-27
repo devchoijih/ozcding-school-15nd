@@ -57,3 +57,6 @@
 
 🔗 [PyMySQL](https://devchoijih.github.io/ozcding-school-15nd/2025_10_24_DB/PyMysQL.html)
 
+DB 참고 링크
+- https://dbdiagram.io/home (다이어그램 그려주는 페이지)
+- https://mermaid.live/edit ( mermaid 언어 번역해 테이블을 시각적으로 표현해주는 페이지)
