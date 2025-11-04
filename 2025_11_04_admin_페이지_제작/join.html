@@ -9,6 +9,8 @@
     rel="stylesheet"
     crossorigin="anonymous"
   />
+
+  <script src="./js/join.js"></script>
 </head>
 <body>
   <div class="container py-5">
@@ -104,39 +106,5 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // Bootstrap 기본 클라이언트 검증 + 비밀번호 일치 확인
-    (function () {
-      const form = document.querySelector('.needs-validation');
-      const pw1 = document.getElementById('password');
-      const pw2 = document.getElementById('password2');
-
-      function checkPwMatch() {
-        if (pw2.value && pw1.value !== pw2.value) {
-          pw2.setCustomValidity('비밀번호 불일치');
-        } else {
-          pw2.setCustomValidity('');
-        }
-      }
-
-      pw1.addEventListener('input', checkPwMatch);
-      pw2.addEventListener('input', checkPwMatch);
-
-      form.addEventListener('submit', function (e) {
-        checkPwMatch();
-        if (!form.checkValidity()) {
-          e.preventDefault();
-          e.stopPropagation();
-        }else {
-          e.preventDefault();
-          alert("회원가입이 완료되었습니다!");
-          window.location.href = "./main.html";
-        }
-
-        form.classList.add('was-validated');
-      }, false);
-    })();
-  </script>
 </body>
 </html>
