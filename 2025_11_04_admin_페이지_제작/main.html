@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <title>Admin Page</title>
+</head>
+<body>
+  <div class="container mt-3">
+    <!-- 상단 우측 다크모드 스위치 -->
+    <div class="d-flex justify-content-end align-items-center">
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" />
+        <label class="form-check-label" for="themeSwitch">다크 모드</label>
+      </div>
+    </div>
+
+    <h3 class="mt-5 mb-3">신규 등록 상품</h3>
+
+    <div class="d-flex justify-content-end mb-2">
+        <a href="./join.html" class="btn btn-outline-success btn-sm">회원가입</a>
+    </div>
+
+    <form class="row row-cols-lg-auto g-3 align-items-center" onsubmit="return false;">
+      <div class="col-12">
+        <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+        <select class="form-select" id="inlineFormSelectPref" name="category_data_table">
+          <!-- 옵션은 JS에서 채움 -->
+        </select>
+      </div>
+      <div class="col-3">
+        <input id="keywordInput" type="text" class="form-control" placeholder="제품명을 입력하세요">
+      </div>
+      <div class="col-auto">
+        <button id="searchBtn" type="button" class="btn btn-primary">조회</button>
+      </div>
+    </form>
+
+    <div class="container mt-3">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>카테고리</th>
+            <th>브랜드</th>
+            <th>상품명</th>
+            <th>가격</th>
+          </tr>
+        </thead>
+        <tbody id="product_data_Table">
+          <!-- JS로 렌더링 -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 페이지네이션: ul만 두고 비워둠 (JS가 채움) -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
+  </div>
+
+  <script>
+    // ===== 데이터 =====
+    const product_data = [
+      { category: "상의", brand: "Supreme",         product: "슈프림 박스로고 후드티",   price: "390,000" },
+      { category: "하의", brand: "DIESEL",          product: "디젤 트랙 팬츠",         price: "188,000" },
+      { category: "신발", brand: "Nike",            product: "에어포스 1",             price: "137,000" },
+      { category: "패션잡화", brand: "Music&Goods", product: "빵빵이 키링",             price: "29,000" },
+
+      { category: "상의", brand: "Stüssy",          product: "스투시 그래픽 반팔티",     price: "89,000" },
+      { category: "상의", brand: "Ader Error",      product: "아더에러 오버핏 맨투맨",   price: "210,000" },
+      { category: "하의", brand: "ADER",            product: "아더에러 와이드 조거팬츠", price: "195,000" },
+      { category: "하의", brand: "Carhartt",        product: "칼하트 더블니 팬츠",       price: "165,000" },
+
+      { category: "신발", brand: "New Balance",     product: "뉴발란스 530",            price: "129,000" },
+      { category: "신발", brand: "Adidas",          product: "삼바 OG",                 price: "119,000" },
+      { category: "패션잡화", brand: "Gentle Monster", product: "젠틀몬스터 선글라스",   price: "289,000" },
+      { category: "패션잡화", brand: "Tiffany & Co.",  product: "티파니 팔찌",          price: "750,000" },
+
+      { category: "아우터", brand: "North Face",    product: "노스페이스 눕시 패딩",     price: "399,000" },
+      { category: "아우터", brand: "Moose Knuckles",product: "무스너클 파카",           price: "1,290,000" },
+      { category: "상의",   brand: "Maison Kitsuné",product: "메종키츠네 폭스 티셔츠",   price: "128,000" },
+      { category: "하의",   brand: "Nike",          product: "나이키 클럽 조거팬츠",     price: "79,000" }
+    ];
+
+    // ===== DOM =====
+    const tbody = document.getElementById('product_data_Table');
+    const paginationEl = document.getElementById('pagination');
+    const categorySelect = document.getElementById('inlineFormSelectPref');
+    const keywordInput = document.getElementById('keywordInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const themeSwitch = document.getElementById('themeSwitch');
+    const root = document.documentElement; // <html>
+
+    // ===== 상태 =====
+    const PAGE_SIZE = 4;
+    let currentPage = 1;
+    let filtered = [...product_data];
+
+    // ===== 테마 =====
+    function setTheme(theme) {
+      root.setAttribute('data-bs-theme', theme);
+      localStorage.setItem('theme', theme);
+      if (themeSwitch) themeSwitch.checked = theme === 'dark';
+    }
+
+    // ===== 렌더링 =====
+    function renderTable(page = 1) {
+      tbody.innerHTML = '';
+      const start = (page - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const slice = filtered.slice(start, end);
+
+      if (slice.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 4;
+        td.className = 'text-center text-muted';
+        td.textContent = '표시할 데이터가 없습니다.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      slice.forEach(item => {
+        const row = tbody.insertRow();
+        row.insertCell(0).textContent = item.category;
+        row.insertCell(1).textContent = item.brand;
+        row.insertCell(2).textContent = item.product;
+        row.insertCell(3).textContent = item.price;
+      });
+    }
+
+    function renderPagination() {
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      paginationEl.innerHTML = '';
+
+      // Previous
+      paginationEl.appendChild(makePageItem('Previous', currentPage === 1, () => goToPage(currentPage - 1)));
+
+      // 숫자 버튼
+      for (let i = 1; i <= totalPages; i++) {
+        paginationEl.appendChild(makePageItem(i, false, () => goToPage(i), i === currentPage));
+      }
+
+      // Next
+      paginationEl.appendChild(makePageItem('Next', currentPage === totalPages, () => goToPage(currentPage + 1)));
+    }
+
+    function makePageItem(label, disabled, onClick, active = false) {
+      const li = document.createElement('li');
+      li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+      const a = document.createElement('a');
+      a.className = 'page-link';
+      a.href = '#';
+      a.textContent = label;
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!disabled) onClick();
+      });
+      li.appendChild(a);
+      return li;
+    }
+
+    function goToPage(page) {
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      currentPage = Math.min(Math.max(1, page), totalPages);
+      renderTable(currentPage);
+      renderPagination();
+    }
+
+    function applyFilter() {
+      const cat = categorySelect.value.trim();
+      const kw = keywordInput.value.trim().toLowerCase();
+
+      filtered = product_data.filter(item => {
+        const byCat = cat ? item.category === cat : true;
+        const byKw = kw ? (item.product.toLowerCase().includes(kw) || item.brand.toLowerCase().includes(kw)) : true;
+        return byCat && byKw;
+      });
+
+      currentPage = 1;
+      renderTable(currentPage);
+      renderPagination();
+    }
+
+    // ===== 초기화 =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // 카테고리 옵션 세팅
+      const categories = [...new Set(product_data.map(i => i.category))];
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '카테고리';
+      categorySelect.appendChild(defaultOption);
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        categorySelect.appendChild(opt);
+      });
+
+      // 이벤트
+      if (searchBtn) searchBtn.addEventListener('click', applyFilter);
+      if (categorySelect) categorySelect.addEventListener('change', applyFilter);
+      if (keywordInput) {
+        keywordInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') applyFilter();
+        });
+      }
+      if (themeSwitch) {
+        themeSwitch.addEventListener('change', () => {
+          setTheme(themeSwitch.checked ? 'dark' : 'light');
+        });
+      }
+
+      // 최초 렌더
+      renderTable(currentPage);
+      renderPagination();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
