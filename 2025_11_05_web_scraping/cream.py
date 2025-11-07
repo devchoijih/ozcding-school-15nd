@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
+import pymysql
 
 url = "https://kream.co.kr"
 
@@ -32,13 +33,43 @@ for item in range(20):
 html = driver.page_source
 soup = BeautifulSoup(html, "html.parser")
 
-items = soup.select(".product_card.pc\:overflow-hidden.flex-shrink-0")
+items = soup.select("a.product_card[data-sdui-id^='product_card/']")
 print(len(items))
 
+product_list = []
 for item in items:
-    product_name = item.select_one('.text_body.pc\:w-fill.pc\:h-fit').text
-    print(f"제품명 : {product_name}")
-    print()
+    category = "상의"
+    product_name = item.select_one('p.text-element.text-lookup.display_paragraph:not(.semibold)').get_text(strip=True)
 
+    if "후드" in product_name:
+        brand_name = item.select_one("[data-sdui-id^='product_brand_name/'] p.semibold").get_text(strip=True)
+        product_price = item.select_one(".price-info-container .label-text-container p.semibold").get_text(strip=True)
+
+        product_info = [category, product_name, brand_name, product_price]
+        product_list.append(product_info)
+
+        print(f"제품명 : {product_name}")
+        print(f"브랜드이름 : {brand_name}")
+        print(f"가격 : {product_price}")
+        print()
+
+connection = pymysql.connect(
+    host="localhost",
+    user="root",
+    password="",
+    db="kream",
+    charset="utf8mb4"
+)
+
+def execute_query(connection, query, args=None):
+    with connection.cursor() as cursor:
+        cursor.execute(query, args or ()) # select * from kream3
+        if query.strip().upper().startswith("SELECT"):
+            return cursor.fetchall()
+        else:
+            connection.commit()
+
+for i in product_list:
+    execute_query(connection, "INSERT INTO KREAM (category, brand, product_name, price) VALUES (%s, %s, %s, %s)",(i[0],i[1],i[2],i[3]))
 
 driver.quit()
