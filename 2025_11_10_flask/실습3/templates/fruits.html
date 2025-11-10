@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for fruit in fruits %}
+        {% if fruit == 'apple' %}
+            <h1>🍓Apple is my favorite fruit!</h1>
+        {% else %}
+            <h1>{{ fruit }}</h1>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
