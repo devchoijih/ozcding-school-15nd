@@ -1,3 +1,4 @@
+from setuptools.extern import names
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -21,31 +22,74 @@ Base.metadata.create_all(bind=engine)
 #세션 준비
 SessionLocal = sessionmaker(bind=engine)
 
+### 단일 데이터 핸들링
+def run_single():
+    db = SessionLocal()
+
+    new_user = User(name='치훈')
+    db.add(new_user)
+    db.commit()
+    print("사용자 추가:", new_user)
+
+    # Select
+    user = db.query(User).all()
+    print("사용자", user)
+
+    # update
+    user = db.query(User).first()
+    if user:
+        user.name = "건우"
+        db.commit()
+        print("사용자 변경:", user)
+
+    # delete
+    user = db.query(User).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        print("사용자 삭제~~~~")
+
+    user = db.query(User).all()
+    print("사용자", user)
+
 db = SessionLocal()
 
-new_user = User(name='치훈')
-db.add(new_user)
+#insert
+users = [User(name="종찬"), User(name="동석"), User(name="건영")]
+db.add_all(users)
 db.commit()
-print("사용자 추가:", new_user)
+print("여러 사용자 추가: ", users)
 
-# Select
-user = db.query(User).all()
-print("사용자", user)
+#select
+### 전체 데이터 조회
+users = db.query(User).order_by(User.id).all()
+for user in users:
+    print(user.name)
 
-# update
-user = db.query(User).first()
-if user:
-    user.name = "건우"
+### 조건 검색
+find_user = db.query(User).filter(User.name == "건영").first()
+print("조건 조회 : ", find_user)
+
+find_user = db.query(User).filter(User.name.like("%치훈%")).first()
+print("조건 조회:", find_user)
+
+### update
+users = db.query(User).all()
+for user in users:
+    user.name = user.name + "_NEW"
     db.commit()
-    print("사용자 변경:", user)
 
+users = db.query(User).order_by(User.id).all()
+for user in users:
+    print(user.name)
 
-# delete
-user = db.query(User).first()
-if user:
-    db.delete(user)
-    db.commit()
-    print("사용자 삭제~~~~")
+### delete
+users = db.query(User).delete()
+db.commit()
 
-user = db.query(User).all()
-print("사용자", user)
+if db.query(User).all():
+    print("데이터가 아직 있습니다.")
+else:
+    print("데이터가 삭제 되었습니다.")
+
+db.close()
