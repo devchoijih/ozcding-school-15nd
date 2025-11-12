@@ -39,5 +39,13 @@ if user:
     db.commit()
     print("사용자 변경:", user)
 
+
+# delete
+user = db.query(User).first()
+if user:
+    db.delete(user)
+    db.commit()
+    print("사용자 삭제~~~~")
+
 user = db.query(User).all()
 print("사용자", user)
