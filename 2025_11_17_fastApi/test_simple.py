@@ -4,7 +4,7 @@ def add(a : int, b : int) -> int:
 def test_add() -> None:
     # Given: 무엇인가 주어졌을때
     # 버그는 "경계"를 좋아함
-    a, b = 1, 1
+    a, b = 1, 0
 
     result = add(a, b)
 
