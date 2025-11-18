@@ -7,6 +7,11 @@ jobs:
   static-analysis: # mypy, black, ruff 등 정적 분석
     runs-on: ubuntu-22.04 # 실제 프로덕션에서는 모든 버전을 고정하는 것이 좋다
     # 예기치 못하게 버전이 올라가서 장애나는 것을 막기 위해
+
+    defaults:
+      run:
+        working-directory: 2025_11_17_fastApi
+
     steps:
       - name: check out the codes
         uses: actions/checkout@v2
@@ -40,6 +45,11 @@ jobs:
 
   test: # 전체 테스트 실행
     runs-on: ubuntu-22.04
+
+    defaults:
+      run:
+        working-directory: 2025_11_17_fastApi
+
     steps:
       - name: check out the codes
         uses: actions/checkout@v2
