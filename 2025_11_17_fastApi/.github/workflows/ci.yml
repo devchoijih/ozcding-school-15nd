@@ -22,7 +22,15 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v2
+        with:
+          key: poetry-1.8.5
+          path: ~/.local
+
       - name: Install Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
           curl -sSL https://install.python-poetry.org | python3 - --version 1.8.5
 

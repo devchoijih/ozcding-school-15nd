@@ -1,10 +1,4 @@
-def add(a: int, b: int) -> int:
-    return a + b
-
-
-def mul(a: int, b: int) -> int:
-    return a * b
-
+from test.math_temp.function import add, mul
 
 def test_add() -> None:
     a, b = 1, 2
