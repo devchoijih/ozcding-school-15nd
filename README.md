@@ -60,3 +60,11 @@
 DB 참고 링크
 - https://dbdiagram.io/home (다이어그램 그려주는 페이지)
 - https://mermaid.live/edit ( mermaid 언어 번역해 테이블을 시각적으로 표현해주는 페이지)
+
+## 🐍 flask
+
+ 레파지토리 소스 참고
+
+## 🐍 fastAPI
+
+ 🔗 [fastAPI_1](https://devchoijih.github.io/ozcding-school-15nd/2025_11_20_fastApi_blog/FastAPI(1_5).html)
