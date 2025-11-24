@@ -68,3 +68,5 @@ DB 참고 링크
 ## 🐍 fastAPI
 
  🔗 [fastAPI_1](https://devchoijih.github.io/ozcding-school-15nd/2025_11_20_fastApi_blog/FastAPI(1_5).html)
+ 🔗 [fastAPI_2](https://devchoijih.github.io/ozcding-school-15nd/2025_11_20_fastApi_blog/FastAPI(2_5).html)
+ 
