@@ -1,9 +1,15 @@
 # app/dependencies.py
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.session import AsyncSessionLocal
 
+from app.crud.user import get_user_by_username
+from app.db.session import AsyncSessionLocal
+from app.utils.security import verify_access_token
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 # ------------------------ DML 감지 로직 ------------------------
 @event.listens_for(Session, "do_orm_execute")
@@ -48,4 +54,27 @@ async def get_db() -> AsyncSession:
                 await session.rollback()
             raise
         # async with 블록 종료 시 세션/커넥션은 자동 close
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db),
+):
+    credentials_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="invalid or expired token",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = verify_access_token(token)  # 내부에서 키/알고리즘/iss/aud/exp 모두 처리
+        username = payload.get("sub")
+        if not username:
+            raise credentials_error
+    except Exception as e:
+        print(e)
+        raise credentials_error
+
+    user = await get_user_by_username(db, username)
+    if not user:
+        raise credentials_error
+    return user
 

@@ -3,7 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.dependencies import get_db  # ✅ DI 일원화
+from app.dependencies import get_current_user, get_db  # ✅ DI 일원화
+from app.models.user import User as UserModel
 from app.schemas.user import UserCreate, UserRead
 from app.crud.user import (
     create_user,
@@ -42,6 +43,7 @@ async def register_user(
 async def read_user(
     user_id: Annotated[int, Path(ge=1)],  # ✅ 입력 검증
     db: AsyncSession = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user),
 ):
     user = await get_user_by_id(db, user_id)
     if not user:
