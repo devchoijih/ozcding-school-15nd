@@ -7,60 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User
 from app.schemas.user import UserCreate
 from app.utils.security import get_password_hash_async  # async 래퍼 사용
-
-
-class UserAlreadyExists(Exception):
-    """중복 사용자 예외: 기본 409"""
-    status_code: int = 409
-    code: str = "user_already_exists"
-
-    def __init__(
-        self,
-        message: str = "user already exists",
-        *,
-        field: Optional[str] = None,
-        value: Optional[str] = None,
-    ) -> None:
-        super().__init__(message)
-        self.field = field
-        self.value = value
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "error": self.code,
-            "message": str(self),
-            "field": self.field,
-            "value": self.value,
-        }
-
-
-class UserNotFound(Exception):
-    """사용자 미존재 예외: 기본 404"""
-    status_code: int = 404
-    code: str = "user_not_found"
-
-    def __init__(
-        self,
-        message: str = "user not found",
-        *,
-        user_id: Optional[int] = None,
-        username: Optional[str] = None,
-        email: Optional[str] = None,
-    ) -> None:
-        super().__init__(message)
-        self.user_id = user_id
-        self.username = username
-        self.email = email
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "error": self.code,
-            "message": str(self),
-            "user_id": self.user_id,
-            "username": self.username,
-            "email": self.email,
-        }
-
+from app.exceptions.user import UserNotFound, UserAlreadyExists
 
 # ✅ PK 조회는 .get() 사용(아이덴티티 맵/1차 캐시 활용)
 async def get_user_by_id(db: AsyncSession, user_id: int) -> User | None:

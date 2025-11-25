@@ -1,11 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, asc, desc
 from fastapi import HTTPException, status
 
 from app.models.comment import Comment
+from app.models.post import Post
 from app.models.user import User as UserModel
-from app.schemas.comment import CommentCreate
-
+from app.schemas.comment import CommentCreate, CommentUpdate
+from app.enums.sort import SortType
 
 async def create_comment_by_post_id_crud(
         db:AsyncSession,
@@ -24,22 +25,47 @@ async def create_comment_by_post_id_crud(
 
 async def get_comments_by_post_id_crud(
         db:AsyncSession,
-        post_id:int
-) -> list[Comment]:
-    comments = await db.execute(select(Comment)
-                                .where(Comment.post_id == post_id)
-                                .order_by(Comment.created_at.desc())
-                                )
+        *,
+        post_id:int,
+        sort:SortType = SortType.desc,
+        page:int = 1,
+        limit:int = 20
+) -> list[dict]:
+    if page < 1:
+        page = 1
 
-    comments = comments.scalars().all()
+    MAX_LIMIT = 100
+    limit = min(limit, MAX_LIMIT)
 
-    return list(comments)
+    order_clause = {
+        SortType.asc: asc(Comment.created_at),
+        SortType.desc: desc(Comment.created_at)
+    }[sort]
+
+    results = await db.execute(
+        select(
+            Comment.id,
+            Comment.content,
+            Comment.created_at,
+            Post.id.label("post_id"),
+            Post.title.label("post_title"),
+            Post.content.label("post_content"),
+        )
+        .join(Post, Post.id == Comment.post_id)
+        .where(Post.id == post_id)
+        .order_by(order_clause)
+        .limit(limit)
+        .offset((page - 1) * limit)
+    )
+
+    rows = results.mappings().all()
+
+    return [dict(row) for row in rows]
 
 async def update_comments_by_post_id_crud(
         db:AsyncSession,
         *,
-        data:CommentCreate,
-        post_id:int,
+        data:CommentUpdate,
         comment_id:int,
         current_user:UserModel
 ) -> Comment:

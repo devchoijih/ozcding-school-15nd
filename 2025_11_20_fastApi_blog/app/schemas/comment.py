@@ -7,6 +7,9 @@ class CommentBase(BaseModel):
 class CommentCreate(CommentBase):
     pass
 
+class CommentUpdate(CommentBase):
+    pass
+
 class CommentRead(CommentBase):
     id: int
     owner_id: int

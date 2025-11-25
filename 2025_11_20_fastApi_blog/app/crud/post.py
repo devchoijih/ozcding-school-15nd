@@ -1,56 +1,33 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 from app.models.post import Post
 from app.schemas.post import PostRead, PostCreate, PostUpdate
-from typing import Optional, Any, Dict
 from app.models.user import User as UserModel
+from app.exceptions.post import PostNotFound, PostOwnerNotMatched
 
-class PostNotFound(Exception):
-    """사용자 미존재 예외: 기본 404"""
-    status_code: int = 404
-    code: str = "post_not_found"
+async def get_posts_by_all(
+        db: AsyncSession
+      , page: int = 1
+      , limit: int = 20
+) -> list[PostRead]:
 
-    def __init__(
-        self,
-        message: str = "post not found",
-        *,
-        post_id: Optional[int] = None
-    ) -> None:
-        super().__init__(message)
-        self.post_id = post_id
+    if page < 1:
+        page = 1
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "error": self.code,
-            "message": str(self),
-            "post_id": self.post_id,
-        }
+    MAX_LIMIT = 100
+    limit = min(limit, MAX_LIMIT)
 
-class PostOwnerNotMatched(Exception):
-    status_code: int = 500
-    code: str = "post_owner_not_matched"
+    offset = (page - 1) * limit
 
-    def __init__(
-        self,
-        message: str = "post_owner_not_matched",
-        *,
-        post_id: Optional[int] = None,
-        owner_id: Optional[int] = None
-    ) -> None:
-        super().__init__(message)
-        self.post_id = post_id
-        self.owner_id = owner_id
+    query = (select(Post)
+             .options(selectinload(Post.comments))
+             .order_by(Post.created_at.desc())
+             .limit(limit)
+             .offset(offset))
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "error": self.code,
-            "message": str(self),
-            "post_id": self.post_id,
-            "owner_id": self.owner_id,
-        }
-
-async def get_posts_by_all(db: AsyncSession) -> list[PostRead] | None:
-    result = await db.execute(select(Post))
+    result = await db.execute(query)
     posts = result.scalars().all()
 
     return [PostRead.model_validate(post) for post in posts]
