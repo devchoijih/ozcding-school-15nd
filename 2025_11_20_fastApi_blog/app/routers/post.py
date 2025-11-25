@@ -5,7 +5,7 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_current_user, get_db
-from app.schemas.comment import CommentCreate
+from app.schemas.comment import CommentCreate, CommentUpdate
 from app.schemas.post import PostRead, PostCreate, PostUpdate
 from app.models.post import Post
 from app.models.user import User as UserModel
@@ -99,11 +99,11 @@ async def get_comments_by_post_id(
 async def update_comments_by_post_id_and_comment_id(
         post_id : Annotated[int, Path(title="게시글 ID", ge=1)]
         , comment_id : Annotated[int, Path(title="댓글 ID", ge=1)]
-        , data: CommentCreate
+        , data: CommentUpdate
         , db:AsyncSession = Depends(get_db)
         , current_user: UserModel = Depends(get_current_user)
 ):
-    return await update_comments_by_post_id_crud(db, data=data, post_id=post_id, comment_id=comment_id, current_user=current_user)
+    return await update_comments_by_post_id_crud(db, data=data, comment_id=comment_id, current_user=current_user)
 
 # 특정 게시글의 특정 댓글 삭제
 @router.delete("/{post_id}/comments/{comment_id}")
