@@ -1,6 +1,6 @@
 # app/models/user.py
 from sqlalchemy import String, Integer, DateTime, func, Index
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.session import Base
 from datetime import datetime
 
@@ -22,6 +22,18 @@ class User(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    posts: Mapped[list["Post"]] = relationship(
+        "Post",
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )
+
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="owner",  # ← Comment.owner 와 매칭
+        cascade="all, delete-orphan",
     )
 
     # (선택) 복합 인덱스 등
