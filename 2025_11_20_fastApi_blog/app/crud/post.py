@@ -1,8 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.post import Post
-from app.schemas.post import PostRead, PostCreate
+from app.schemas.post import PostRead, PostCreate, PostUpdate
 from typing import Optional, Any, Dict
+from app.models.user import User as UserModel
 
 class PostNotFound(Exception):
     """사용자 미존재 예외: 기본 404"""
@@ -70,16 +71,33 @@ async def insert_posts_by_user_id(db: AsyncSession, post: Post) -> Post:
     return post
 
 
-async def delete_posts_by_user_id(db: AsyncSession, post_id:int, owner_id:int) -> dict[str, str]:
+async def delete_posts_by_user_id(db: AsyncSession, *, post_id:int, current_user:UserModel) -> dict[str, str]:
     post = await db.get(Post, post_id)
 
     if not post:
         raise PostNotFound(post_id=post_id)
 
-    if post.owner_id != owner_id:
+    if post.owner_id != current_user.id:
         raise PostOwnerNotMatched(post_id=post_id)
 
     await db.delete(post)
     await db.commit()
 
     return {"message": "삭제 완료"}
+
+async def update_post_by_user_id(db: AsyncSession, *, post_id:int, current_user:UserModel, data:PostUpdate) -> Post:
+    post = await db.get(Post, post_id)
+
+    if not post:
+        raise PostNotFound(post_id=post_id)
+
+    if post.owner_id != current_user.id:
+        raise PostOwnerNotMatched(post_id=post_id)
+
+    post.title = data.title
+    post.content = data.content
+
+    await db.commit()
+    await db.refresh(post)
+
+    return post

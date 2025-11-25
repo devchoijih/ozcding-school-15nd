@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.dependencies import get_current_user, get_db
-from app.schemas.post import PostRead, PostCreate
+from app.schemas.post import PostRead, PostCreate, PostUpdate
 from app.models.post import Post
 from app.models.user import User as UserModel
-from app.crud.post import (get_posts_by_all, get_posts_by_user_id, insert_posts_by_user_id, delete_posts_by_user_id)
+from app.crud.post import (get_posts_by_all, get_posts_by_user_id, insert_posts_by_user_id, delete_posts_by_user_id, update_post_by_user_id)
 from app.models.comment import Comment
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -48,11 +48,16 @@ async def delete_post(
       , current_user: UserModel = Depends(get_current_user)
 ):
 
-    return await delete_posts_by_user_id(db, post_id, current_user.id)
+    return await delete_posts_by_user_id(db, post_id=post_id, current_user=current_user)
 
 @router.put("/{post_id}")
-async def update_post_by_post_id(post_id: Annotated[int, Path(title="게시글 ID", ge=1)]):
-    return {"retult": f"{post_id} update ok"}
+async def update_post_by_post_id(
+        post_id: Annotated[int, Path(title="게시글 ID", ge=1)]
+      , data: PostUpdate
+      , db:AsyncSession = Depends(get_db)
+      , current_user: UserModel = Depends(get_current_user)
+):
+    return await update_post_by_user_id(db, post_id=post_id, current_user=current_user, data=data)
 
 @router.get("/{post_id}/comments")
 async def get_comment_by_post_id(post_id : Annotated[int, Path(title="게시글 ID", ge=1)]):
