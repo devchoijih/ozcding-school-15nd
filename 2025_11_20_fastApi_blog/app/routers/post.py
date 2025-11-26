@@ -8,10 +8,11 @@ from app.dependencies import get_current_user, get_db
 from app.schemas.comment import CommentCreate, CommentUpdate
 from app.schemas.post import PostRead, PostCreate, PostUpdate
 from app.models.post import Post
+from app.enums.sort import SortType
 from app.models.user import User as UserModel
 from app.crud.post import (get_posts_by_all, get_posts_by_user_id, insert_posts_by_user_id, delete_posts_by_user_id, update_post_by_user_id)
 from app.crud.comment import (create_comment_by_post_id_crud, get_comments_by_post_id_crud,
-                              update_comments_by_post_id_crud, SortType)
+                              update_comments_by_post_id_crud, delete_comments_by_post_id_crud)
 
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -110,5 +111,8 @@ async def update_comments_by_post_id_and_comment_id(
 async def delete_comments_by_post_id_and_comment_id(
         post_id : Annotated[int, Path(title="게시글 ID", ge=1)]
         , comment_id : Annotated[int, Path(title="댓글 ID", ge=1)]
+        , db:AsyncSession = Depends(get_db)
+        , current_user: UserModel = Depends(get_current_user)
 ):
-    return {"test": "ok"}
+
+    return await delete_comments_by_post_id_crud(db, comment_id=comment_id, current_user=current_user)

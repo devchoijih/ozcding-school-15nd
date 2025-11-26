@@ -83,3 +83,22 @@ async def update_comments_by_post_id_crud(
     await db.refresh(comment)
 
     return comment
+
+async def delete_comments_by_post_id_crud(
+        db:AsyncSession,
+        *,
+        comment_id:int,
+        current_user:UserModel
+) -> dict[str, str]:
+    comment = await db.get(Comment, comment_id)
+
+    if not comment:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="comment not found")
+
+    if comment.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="permission denied")
+
+    await db.delete(comment)
+    await db.commit()
+
+    return {"delete" : "ok"}
