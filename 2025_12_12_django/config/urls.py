@@ -18,6 +18,14 @@ Including another URLconf
 from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import path
+from django.shortcuts import render
+
+movie_list = [
+    {'title' : '파묘', 'director':'장재현'},
+    {'title' : '윙카', 'director':'폴 킴'},
+    {'title' : '듄', 'director':'드니 빌뇌브'},
+    {'title' : '시민덕희', 'director':'박영주'}
+]
 
 def index(request):
     return HttpResponse("Hello")
@@ -38,10 +46,20 @@ def book(request, num):
 def language(request, lang):
     return HttpResponse(f'<h1>language: {lang} 언어 페이지입니다.')
 
+def movies(request):
+    movie_titles = [movie['title'] for movie in movie_list]
+    return render(request, 'movies.html', {"movie_list":movie_list})
+
+def movie_detail(request, movie_id):
+    movie = movie_list[movie_id - 1]
+    return HttpResponse(f'<h1>{movie["title"]} ({movie["director"]})</h1>')
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index),
     path("book_list/", blog_list),
     path("book_list/<int:num>/", book),
     path("language/<str:lang>/", language),
+    path("movies/", movies),
+    path("movie/<int:movie_id>", movie_detail),
 ]
