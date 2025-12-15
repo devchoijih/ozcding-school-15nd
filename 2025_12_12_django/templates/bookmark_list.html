@@ -7,5 +7,12 @@
 </head>
 <body>
     <h1>Bookmark List 페이지 입니다.</h1>
+    {% for bookmark in bookmarks %}
+        <p>
+         <a href="/bookmark/{{ bookmark.id }}">
+            {{ bookmark.name }}
+         </a>
+        </p>
+    {% endfor %}
 </body>
 </html>
