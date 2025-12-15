@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import path
 from django.shortcuts import render
+from bookmark import views
 
 movie_list = [
     {'title' : '파묘', 'director':'장재현'},
@@ -62,4 +63,6 @@ urlpatterns = [
     path("language/<str:lang>/", language),
     path("movies/", movies),
     path("movie/<int:movie_id>", movie_detail),
+    path("bookmark/", views.bookmark_list),
+    path("bookmark/<int:num>", views.bookmark_detail),
 ]
