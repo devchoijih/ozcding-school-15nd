@@ -1,0 +1,19 @@
+[project]
+name = "2025-12-17-django-blog"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "devchoijih",email = "wlgns3855@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django (>=6.0,<7.0)",
+    "ipython (>=9.8.0,<10.0.0)",
+    "django-extensions (>=4.1,<5.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
