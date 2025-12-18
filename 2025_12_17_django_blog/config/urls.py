@@ -29,5 +29,7 @@ urlpatterns = [
     path('accounts/', include("django.contrib.auth.urls")),
     path('signup/', member_views.sign_up, name="signup"),
     path('blog/create/', views.blog_create, name="blog_create"),
-    path('blog/<int:pk>/update/', views.blog_update, name="blog_update")
+    path('blog/<int:pk>/update/', views.blog_update, name="blog_update"),
+    path('blog/<int:pk>/delete/', views.blog_delete, name="blog_delete")
+
 ]
