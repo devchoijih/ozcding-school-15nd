@@ -129,4 +129,5 @@ STATIC_URL = "static/"
 
 #login
 LOGIN_REDIRECT_URL = "/blog"
+LOGIN_URL = "/accounts/login/"
 LOGOUT_REDIRECT_URL = "/blog"
