@@ -6,11 +6,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from blog.forms import BlogForm
 from blog.models import Blog
 from django.urls import reverse
+from django.db.models import Q
 
 # Create your views here.
 
 def blog_list(request):
-    blogs = Blog.objects.all().order_by('-id')
+
+    q = request.GET.get("q", "")
+
+    blogs = Blog.objects.filter(
+        Q(title__icontains=q) or
+        Q(content__icontains=q)
+    ).order_by('-id')
 
     paginator = Paginator(blogs, 10)
     page = request.GET.get('page')
