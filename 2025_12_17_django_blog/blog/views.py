@@ -30,8 +30,8 @@ def blog_list(request):
     request.session['count'] = request.session.get('count', 0) + 1
 
     context = {
-        #'blogs': blogs,
-        'page_object': page_object,
+        'object_list': page_object.object_list,
+        'page_obj': page_object,
     }
 
     response = render(request, 'blog_list.html', context)
