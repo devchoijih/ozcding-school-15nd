@@ -49,6 +49,8 @@ urlpatterns = [
 
     path('cb/', cb_views.BlogListView.as_view(), name='cb_blog_list'),
 
+    path('cb/<int:id>/', cb_views.BlogDetailView.as_view(), name='cb_blog_detail'),
+
     path('about', AboutView.as_view(), name='about'),
     path('redirect/', RedirectView.as_view(pattern_name='about'), name='redirect'),
     path('redirect2/', lambda req: redirect(reverse('about'))),
