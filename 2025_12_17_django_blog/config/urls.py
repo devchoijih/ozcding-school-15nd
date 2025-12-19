@@ -39,17 +39,15 @@ class TestView(View):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("blog/", views.blog_list, name="blog_list"),
-    path("blog/<int:pk>/", views.blog_detail, name="blog_detail"),
+    # path("blog/", views.blog_list, name="blog_list"),
+    # path("blog/<int:pk>/", views.blog_detail, name="blog_detail"),
     path('accounts/', include("django.contrib.auth.urls")),
     path('signup/', member_views.sign_up, name="signup"),
-    path('blog/create/', views.blog_create, name="blog_create"),
-    path('blog/<int:pk>/update/', views.blog_update, name="blog_update"),
-    path('blog/<int:pk>/delete/', views.blog_delete, name="blog_delete"),
+    # path('blog/create/', views.blog_create, name="blog_create"),
+    # path('blog/<int:pk>/update/', views.blog_update, name="blog_update"),
+    # path('blog/<int:pk>/delete/', views.blog_delete, name="blog_delete"),
 
-    path('cb/', cb_views.BlogListView.as_view(), name='cb_blog_list'),
-
-    path('cb/<int:id>/', cb_views.BlogDetailView.as_view(), name='cb_blog_detail'),
+    path('', include(('blog.urls', 'blog'), namespace='blog')),
 
     path('about', AboutView.as_view(), name='about'),
     path('redirect/', RedirectView.as_view(pattern_name='about'), name='redirect'),

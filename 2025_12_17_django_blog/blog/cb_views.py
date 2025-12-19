@@ -1,5 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import ListView, DetailView
+from django.http import HttpResponseRedirect, Http404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.models import Blog
 
@@ -38,3 +41,51 @@ class BlogDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['test'] = 'CBV'
         return context
+
+class BlogCreateView(LoginRequiredMixin, CreateView):
+    model = Blog
+    template_name = 'blog_create.html'
+    fields = ('title', 'content')
+    #success_url = reverse_lazy('blog:list', k)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('blog:detail', kwargs={'id': self.object.id})
+
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    template_name = 'blog_update.html'
+    fields = ('title', 'content')
+    pk_url_kwarg = 'id'
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+
+        if self.object.author != self.request.user:
+            raise Http404
+
+        return self.object
+
+    def get_success_url(self):
+        return reverse_lazy('blog:detail', kwargs={'id': self.object.id})
+
+
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
+    model = Blog
+    pk_url_kwarg = 'id'
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+
+        if self.object.author != self.request.user:
+            raise Http404
+
+        return self.object
+
+    def get_success_url(self):
+        return reverse_lazy('blog:list')
