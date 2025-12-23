@@ -1,12 +1,14 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>블로그 프로젝트</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav style="display: flex; justify-content: space-between;">
+    <nav style="d-flex justify-content-between">
         <div>
             <a href="{% url 'blog:list' %}">홈</a>
         </div>
@@ -24,5 +26,6 @@
         </div>
     </nav>
     {% block content %}{% endblock %}
+    <script src="{% static 'js/bootstrap.js' %}"></script>
 </body>
 </html>
