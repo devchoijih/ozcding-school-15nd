@@ -28,7 +28,7 @@
                 <button class="btn btn-primary">작성</button>
             </div>
         </form>
-        {% for c in blog.comment_set.all %}
+        {% for c in object_list %}
           <div class="border rounded p-3 mb-2">
             <div class="d-flex justify-content-between">
               <div>
@@ -41,10 +41,12 @@
               {{ c.content|linebreaksbr }}
             </div>
           </div>
+
         {% empty %}
           <p class="text-muted">첫 댓글을 남겨보세요.</p>
         {% endfor %}
     {% endif %}
 
+    {% include 'pagination.html' %}
     <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}

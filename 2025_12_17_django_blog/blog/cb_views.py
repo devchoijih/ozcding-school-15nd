@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -27,10 +28,16 @@ class BlogListView(ListView):
 
         return queryset
 
-class BlogDetailView(DetailView):
-    model = Blog
+class BlogDetailView(ListView):
+    model = Comment
+    #queryset = Blog.objects.all().prefetch_related('comment_set', 'comment_set__author')
     template_name = 'blog_detail.html'
+    paginate_by = 5
     pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.object = get_object_or_404(Blog, id=kwargs.get('id'))
+        return super().get(request, *args, **kwargs)
 
     # def get_object(self, queryset=None):
     #     object = super().get_object()
@@ -38,10 +45,13 @@ class BlogDetailView(DetailView):
     #
     #     return object
 
+    def get_queryset(self):
+        return self.model.objects.filter(blog=self.object).order_by("-id").select_related('author')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentForm()
-        context['comments'] = Comment.objects.filter(blog_id=self.kwargs['id'])
+        context['blog'] = self.object
         return context
 
     def post(self, *args, **kwargs):
