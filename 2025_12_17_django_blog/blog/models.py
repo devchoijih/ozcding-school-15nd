@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from utils.models import TimestampModel
+
 User = get_user_model()
 
 # Create your models here.
 
-class Blog(models.Model):
+class Blog(TimestampModel):
     CATEGORY_CHOICES = (
         ('free', '자유'),
         ('travel', '여행'),
@@ -21,12 +23,27 @@ class Blog(models.Model):
     #models.PROTECT => 삭제가 불가능함 (유저를 삭제하려고할때 블로그가 있으면 유저 삭제가 불가능)
     #models.SET_NULL => 널값을 넣습니다. => 유저 삭제시 블로그의 author가 null이 됨
 
-    created_at = models.DateTimeField('작성일자', auto_now_add=True)
-    updated_at = models.DateTimeField('수정일자', auto_now=True)
-
     def __str__(self):
         return f'[{self.get_category_display()}] {self.title}'
 
     class Meta:
         verbose_name = '블로그'
         verbose_name_plural = '블로그 목록'
+
+class Comment(TimestampModel):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    content = models.CharField('본문', max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.blog.title} 댓글'
+
+    class Meta:
+        verbose_name = '댓글'
+        verbose_name_plural = '댓글 목록'
+    ...
+    # blog
+    # 댓글내용
+    # 작성자
+    # 작성일자
+    # 수정일자

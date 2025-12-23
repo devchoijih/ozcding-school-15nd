@@ -58,7 +58,7 @@ def blog_create(request):
         form = BlogForm()
 
     context = {'form': form}
-    return render(request, 'blog_create.html', context)
+    return render(request, 'blog_form.html', context)
 
 def blog_update(request, pk):
     blog = get_object_or_404(Blog, pk=pk, author=request.user)
@@ -73,7 +73,7 @@ def blog_update(request, pk):
     context = {
         'form': form,
     }
-    return render(request, 'blog_update.html', context)
+    return render(request, 'blog_form.html', context)
 
 @login_required()
 @require_http_methods(['POST'])

@@ -1,17 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>{{ blog.title }}</p>
-    {% if request.user == blog.author %}
-        <div style="text-align: right">
-         <a href="{% url 'blog:update' blog.pk %}">수정</a>
-        <form action="{% url 'blog:delete' blog.pk %}" method="post">
-            {% csrf_token %}
-            <button>삭제</button>
-        </form>
-        </div>
-    {% endif %}
+    <div class="mt-2 d-flex justify-content-between">
+        <p>{{ blog.title }}</p>
+        {% if request.user == blog.author %}
+            <div>
+                <a class="btn btn-sm btn-warning" href="{% url 'blog:update' blog.pk %}">수정</a>
+                <form action="{% url 'blog:delete' blog.pk %}" method="post" style="display:inline-block;">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-danger">삭제</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
     <div style="text-align: right">{{ blog.author.username }}</div>
+    <hr>
     <p>{{ blog.content }}</p>
 
-    <a href="{% url 'blog:list' %}">목록으로 돌아가기 {{ test }}</a>
+    <hr>
+
+    <hr>
+    {% if request.user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <div class="text-end">
+                <button class="btn btn-primary">작성</button>
+            </div>
+        </form>
+        {% for c in blog.comment_set.all %}
+          <div class="border rounded p-3 mb-2">
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>{{ c.author.username }}</strong>
+                <small class="text-muted ms-2">{{ c.created_at|date:"Y-m-d H:i" }}</small>
+              </div>
+            </div>
+
+            <div class="mt-2">
+              {{ c.content|linebreaksbr }}
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-muted">첫 댓글을 남겨보세요.</p>
+        {% endfor %}
+    {% endif %}
+
+    <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}

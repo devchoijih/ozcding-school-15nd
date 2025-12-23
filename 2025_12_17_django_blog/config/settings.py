@@ -135,6 +135,6 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / ".static_root"
 
 #login
-LOGIN_REDIRECT_URL = "/blog"
+LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/accounts/login/"
-LOGOUT_REDIRECT_URL = "/blog"
+LOGOUT_REDIRECT_URL = "/"
